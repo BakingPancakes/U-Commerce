@@ -10,14 +10,13 @@ function MainPage() {
         {/* Slideshow Section */}
         <section className="slideshow-container">
           <div className="slide-image">
-            <img src={require('../assets/hero.png')} alt="Slide 1" className="slide" />
+            <img src={require('../assets/hamp-camp-pic.jpg')} alt="Slide 1" className="slide" />
           </div>
           <div className="slide-image">
-            <img src={require('../assets/react.svg')} alt="Slide 2" className="slide" />
+            <img src={require('../assets/holyoke-camp-pic.jpg')} alt="Slide 2" className="slide" />
           </div>
-          <div className="slide-image">
-            <img src={require('../assets/vite.svg')} alt="Slide 3" className="slide" />
-          </div>
+          {/* Assuming there are more images, I will use a placeholder or the next logical file if provided. Since only two were explicitly named, I'll stop here unless more are provided. */}
+          {/* If more images are needed, please provide their filenames. */}
         </section>
 
         {/* Welcome Header */}
