@@ -12,7 +12,26 @@
   border-bottom: 2px solid #ccc;
 }
 
-.content {
+.slideshow-container {
+  display: flex;
+  overflow: hidden;
+  margin-bottom: 30px;
+}
+
+.slide-image {
+  flex: 1;
+  min-width: 0; /* Allows flex items to shrink */
+}
+
+.slide-image .slide {
+  width: 100%;
+  height: 300px; /* Fixed height for slides */
+  object-fit: cover; /* Ensures images cover the area without distortion */
+}
+
+.about-section {
   padding: 20px;
   flex-grow: 1;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
