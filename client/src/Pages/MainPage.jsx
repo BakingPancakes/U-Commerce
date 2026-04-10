@@ -1,6 +1,11 @@
 import React from 'react'
 import Navbar from '../Components/Navbar'
 import './MainPage.css'
+import hampcollpic from "../assets/hamp-camp-pic.jpg"
+import umasspic from "../assets/hamp-camp-pic.jpg"
+import holyokepic from "../assets/hamp-camp-pic.jpg"
+import smithpic from "../assets/hamp-camp-pic.jpg"
+import amcolpic from "../assets/hamp-camp-pic.jpg"
 
 function MainPage() {
   return (
@@ -10,13 +15,20 @@ function MainPage() {
         {/* Slideshow Section */}
         <section className="slideshow-container">
           <div className="slide-image">
-            <img src={require('../assets/hamp-camp-pic.jpg')} alt="Slide 1" className="slide" />
+            <img src={hampcollpic} alt="Slide 1" className="slide" />
           </div>
           <div className="slide-image">
-            <img src={require('../assets/holyoke-camp-pic.jpg')} alt="Slide 2" className="slide" />
+            <img src={umasspic} alt="Slide 2" className="slide" />
           </div>
-          {/* Assuming there are more images, I will use a placeholder or the next logical file if provided. Since only two were explicitly named, I'll stop here unless more are provided. */}
-          {/* If more images are needed, please provide their filenames. */}
+          <div className="slide-image">
+            <img src={smithpic} alt="Slide 3" className="slide" />
+          </div>
+          <div className="slide-image">
+            <img src={holyokepic} alt="Slide 4" className="slide" />
+          </div>
+          <div className="slide-image">
+            <img src={amcolpic} alt="Slide 5" className="slide" />
+          </div>
         </section>
 
         {/* Welcome Header */}
