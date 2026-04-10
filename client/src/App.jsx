@@ -1,6 +1,8 @@
 import './App.css'
 import { Routes, Route } from 'react-router-dom'
 import MainPage from './Pages/MainPage'
+import ListingsPage from './Pages/ListingsPage'
+import LoginPage from './Pages/LoginPage'
 
 function App() {
 
@@ -8,8 +10,8 @@ function App() {
     <Routes>
       <Route path="/" element={<MainPage />} />
       {/* You can add other routes here later */}
-      <Route path="/listings" element={<div>Listings Page</div>} />
-      <Route path="/login" element={<div>Login Page</div>} />
+      <Route path="/listings" element={<ListingsPage />} />
+      <Route path="/login" element={<LoginPage />} />
     </Routes>
   )
 }
