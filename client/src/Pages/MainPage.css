@@ -41,7 +41,8 @@
   color: white;
   text-align: center;
   font-size: 3rem;
-  text-shadow: 0 4px 12px rgba(0,0,0,0.8);
+  /* Changed text-shadow to a solid black outline effect for better readability */
+  text-shadow: 2px 2px 0 #000000;
   margin: 0;
   padding: 0;
   background: none;
@@ -50,7 +51,7 @@
 
 /* About section */
 .about-section {
-  padding: 20px;
+  padding: 40px; /* Expanded padding */
   flex-grow: 1;
   background-color: #ffffff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
