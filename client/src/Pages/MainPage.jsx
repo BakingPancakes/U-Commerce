@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Navbar from '../Components/Navbar'
 import './MainPage.css'
 import hampcollpic from "../assets/hamp-camp-pic.jpg"
@@ -8,27 +8,35 @@ import smithpic from "../assets/hamp-camp-pic.jpg"
 import amcolpic from "../assets/hamp-camp-pic.jpg"
 
 function MainPage() {
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(0)
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlideIndex((prevIndex + 1) % 5)
+    }, 5000) // Change slide every 5 seconds
+
+    return () => clearInterval(timer)
+  }, [])
+
+  const slides = [
+    hampcollpic,
+    umasspic,
+    smithpic,
+    holyokepic,
+    amcolpic
+  ]
+
   return (
     <div className="main-page-container">
       <Navbar />
       <main>
         {/* Slideshow Section */}
         <section className="slideshow-container">
-          <div className="slide-image">
-            <img src={hampcollpic} alt="Slide 1" className="slide" />
-          </div>
-          <div className="slide-image">
-            <img src={umasspic} alt="Slide 2" className="slide" />
-          </div>
-          <div className="slide-image">
-            <img src={smithpic} alt="Slide 3" className="slide" />
-          </div>
-          <div className="slide-image">
-            <img src={holyokepic} alt="Slide 4" className="slide" />
-          </div>
-          <div className="slide-image">
-            <img src={amcolpic} alt="Slide 5" className="slide" />
-          </div>
+          {slides.map((src, index) => (
+            <div key={index} className="slide-image">
+              <img src={src} alt={`Slide ${index + 1}`} className="slide" />
+            </div>
+          ))}
         </section>
 
         {/* Welcome Header */}
