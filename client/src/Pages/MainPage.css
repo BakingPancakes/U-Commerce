@@ -1,8 +1,15 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 .main-page-container {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   font-family: sans-serif;
+  max-width: 100%;
 }
 
 /* Wrap slideshow + text */
@@ -41,18 +48,48 @@
   color: white;
   text-align: center;
   font-size: 3rem;
-  /* Changed text-shadow to a solid black outline effect for better readability */
-  text-shadow: 2px 2px 0 #000000;
+  text-shadow:
+    -2px -2px 0 #000,
+     2px -2px 0 #000,
+    -2px  2px 0 #000,
+     2px  2px 0 #000;   /* full black outline */
   margin: 0;
   padding: 0;
   background: none;
   border: none;
 }
 
+.welcome-header h1 {
+  font-family: "Georgia", "Times New Roman", Times, serif !important;
+  color: white !important;
+  text-shadow:
+    -2px -2px 0 #000,
+     2px -2px 0 #000,
+    -2px  2px 0 #000,
+     2px  2px 0 #000;
+}
+
+
 /* About section */
 .about-section {
-  padding: 40px; /* Expanded padding */
+  padding: 40px;
   flex-grow: 1;
   background-color: #ffffff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  max-width: 900px;
+  margin: 40px auto 0; /* adds space above + centers the block */
+  text-align: center;
+  border-radius: 8px;
+}
+
+.about-section p {
+  margin-bottom: 1.6rem;
+}
+
+
+
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }

@@ -46,7 +46,10 @@ function MainPage() {
         {/* About Section */}
         <section className="about-section">
           <h2>About Our Application</h2>
-          <p>We are the central location for 5 college students to buy and sell goods and services.</p>
+          <p></p>
+          <p>U-Commerce was created to give Five College students a dedicated, centralized marketplace for buying, selling, and exchanging items and services within the local student community. Students across UMass Amherst, Amherst College, Hampshire College, Mount Holyoke, and Smith often rely on scattered platforms to find furniture, textbooks, dorm essentials, sublets, or student-run services. That fragmentation makes it harder to discover what's available nearby and adds stress during move-in, move-out, and semester transitions.</p>
+          <p> </p>
+          <p>Our platform brings everything into one place. It connects students who want to sell items they no longer need with students who are looking for affordable, local options. It also helps student-run services gain visibility and credibility within the community. Whether someone is preparing for their first semester, furnishing an off-campus apartment, or clearing out belongings before graduation, U-Commerce makes the process faster, easier, and more reliable.</p>
         </section>
       </main>
     </div>
