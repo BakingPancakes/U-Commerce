@@ -1,0 +1,36 @@
+.navbar {
+  background-color: #a00000; /* Umass Amherst primary red */
+  padding: 10px 0;
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.nav-link {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  padding: 8px 15px;
+  transition: background-color 0.3s ease;
+}
+
+.nav-link:hover {
+  background-color: #cc0000; /* Slightly darker red on hover */
+  border-radius: 4px;
+}
+
+.login-button {
+  background-color: #ffcc00; /* Umass Amherst gold/yellow accent */
+  color: #333;
+  border-radius: 4px;
+  padding: 8px 15px;
+  transition: background-color 0.3s ease;
+}
+
+.login-button:hover {
+  background-color: #e6b800; /* Slightly darker gold on hover */
+}
