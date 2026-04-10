@@ -1,0 +1,18 @@
+.main-page-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: sans-serif;
+}
+
+.welcome-header {
+  background-color: #f0f0f0;
+  padding: 20px;
+  text-align: center;
+  border-bottom: 2px solid #ccc;
+}
+
+.content {
+  padding: 20px;
+  flex-grow: 1;
+}
