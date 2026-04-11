@@ -1,121 +1,187 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import "./App.css";
+import { useMemo, useState } from "react";
+
+const listingsData = [
+  {
+    id: 1,
+    title: "MacBook Air M1",
+    price: 650,
+    category: "Electronics",
+    condition: "Used - Good",
+    seller: "Riya",
+    rating: 4.8,
+    image:
+      "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=800&q=80",
+  },
+  {
+    id: 2,
+    title: "Twin XL Bed Frame",
+    price: 90,
+    category: "Furniture",
+    condition: "Used - Fair",
+    seller: "Aman",
+    rating: 4.3,
+    image:
+      "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=80",
+  },
+  {
+    id: 3,
+    title: "Calculus Textbook",
+    price: 25,
+    category: "Books",
+    condition: "Like New",
+    seller: "Sarah",
+    rating: 4.7,
+    image:
+      "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=800&q=80",
+  },
+  {
+    id: 4,
+    title: "Desk Lamp",
+    price: 18,
+    category: "Home",
+    condition: "Used - Good",
+    seller: "Kevin",
+    rating: 4.4,
+    image:
+      "https://images.unsplash.com/photo-1540932239986-30128078f3c5?auto=format&fit=crop&w=800&q=80",
+  },
+  {
+    id: 5,
+    title: "iPad 9th Gen",
+    price: 220,
+    category: "Electronics",
+    condition: "Used - Excellent",
+    seller: "Neha",
+    rating: 4.9,
+    image:
+      "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&w=800&q=80",
+  },
+  {
+    id: 6,
+    title: "Study Chair",
+    price: 45,
+    category: "Furniture",
+    condition: "Used - Good",
+    seller: "David",
+    rating: 4.5,
+    image:
+      "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=80",
+  },
+];
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [sortOption, setSortOption] = useState("default");
+
+  const categories = ["All", ...new Set(listingsData.map((item) => item.category))];
+
+  const filteredListings = useMemo(() => {
+    let filtered = listingsData.filter((item) => {
+      const matchesSearch = item.title
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
+
+      const matchesCategory =
+        selectedCategory === "All" || item.category === selectedCategory;
+
+      return matchesSearch && matchesCategory;
+    });
+
+    if (sortOption === "lowToHigh") {
+      filtered = [...filtered].sort((a, b) => a.price - b.price);
+    } else if (sortOption === "highToLow") {
+      filtered = [...filtered].sort((a, b) => b.price - a.price);
+    } else if (sortOption === "rating") {
+      filtered = [...filtered].sort((a, b) => b.rating - a.rating);
+    }
+
+    return filtered;
+  }, [searchTerm, selectedCategory, sortOption]);
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
+    <div className="app">
+      <header className="hero">
+        <div className="hero-content">
+          <h1>U-Commerce Listings</h1>
+          <p>Buy and sell items easily within your college community.</p>
         </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+      </header>
 
-      <div className="ticks"></div>
+      <main className="container">
+        <section className="controls">
+          <input
+            type="text"
+            placeholder="Search listings..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="search-input"
+          />
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+          <select
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            className="select-control"
+          >
+            {categories.map((category) => (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            ))}
+          </select>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+          <select
+            value={sortOption}
+            onChange={(e) => setSortOption(e.target.value)}
+            className="select-control"
+          >
+            <option value="default">Sort By</option>
+            <option value="lowToHigh">Price: Low to High</option>
+            <option value="highToLow">Price: High to Low</option>
+            <option value="rating">Top Rated</option>
+          </select>
+        </section>
+
+        <section className="results-info">
+          <h2>Available Listings</h2>
+          <span>{filteredListings.length} item(s)</span>
+        </section>
+
+        <section className="listings-grid">
+          {filteredListings.length > 0 ? (
+            filteredListings.map((item) => (
+              <article key={item.id} className="listing-card">
+                <img src={item.image} alt={item.title} className="listing-image" />
+
+                <div className="listing-content">
+                  <div className="listing-top">
+                    <h3>{item.title}</h3>
+                    <span className="price">${item.price}</span>
+                  </div>
+
+                  <p className="category">{item.category}</p>
+
+                  <div className="meta">
+                    <span>{item.condition}</span>
+                    <span>Seller: {item.seller}</span>
+                    <span>⭐ {item.rating}</span>
+                  </div>
+
+                  <button className="view-btn">View Details</button>
+                </div>
+              </article>
+            ))
+          ) : (
+            <div className="empty-state">
+              <h3>No listings found</h3>
+              <p>Try changing your search or filter options.</p>
+            </div>
+          )}
+        </section>
+      </main>
+    </div>
+  );
 }
 
-export default App
+export default App;
