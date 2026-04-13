@@ -1,0 +1,59 @@
+import React, { useState, useEffect } from 'react'
+import Navbar from '../Components/Navbar'
+import './MainPage.css'
+import hampcollpic from "../assets/hamp-camp-pic.jpg"
+import umasspic from "../assets/umass-camp-pic.jpg"
+import holyokepic from "../assets/holyoke-camp-pic.jpg"
+import smithpic from "../assets/smith-camp-pic.jpg"
+import amcolpic from "../assets/amherstcoll-camp-pic.jpg"
+
+function MainPage() {
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(0)
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlideIndex(prevIndex => (prevIndex + 1) % 5)
+    }, 5000) // Change slide every 5 seconds
+
+    return () => clearInterval(timer)
+  }, [])
+
+  const slides = [
+    hampcollpic,
+    umasspic,
+    smithpic,
+    holyokepic,
+    amcolpic
+  ]
+
+  return (
+    <div className="main-page-container">
+      <Navbar />
+      <main>
+        {/* Slideshow Section */}
+        <div className="hero-section">
+          <section className="slideshow-container">
+            <div className="slide-image">
+              <img src={slides[currentSlideIndex]} alt="Slideshow" className="slide" />
+            </div>
+          </section>
+
+          <header className="welcome-header">
+            <h1>Welcome to U-Commerce</h1>
+          </header>
+        </div>
+
+        {/* About Section */}
+        <section className="about-section">
+          <h2>About Our Application</h2>
+          <p></p>
+          <p>U-Commerce was created to give Five College students a dedicated, centralized marketplace for buying, selling, and exchanging items and services within the local student community. Students across UMass Amherst, Amherst College, Hampshire College, Mount Holyoke, and Smith often rely on scattered platforms to find furniture, textbooks, dorm essentials, sublets, or student-run services. That fragmentation makes it harder to discover what's available nearby and adds stress during move-in, move-out, and semester transitions.</p>
+          <p> </p>
+          <p>Our platform brings everything into one place. It connects students who want to sell items they no longer need with students who are looking for affordable, local options. It also helps student-run services gain visibility and credibility within the community. Whether someone is preparing for their first semester, furnishing an off-campus apartment, or clearing out belongings before graduation, U-Commerce makes the process faster, easier, and more reliable.</p>
+        </section>
+      </main>
+    </div>
+  )
+}
+
+export default MainPage
