@@ -7,6 +7,8 @@ import holyokepic from "../assets/holyoke-camp-pic.jpg"
 import smithpic from "../assets/smith-camp-pic.jpg"
 import amcolpic from "../assets/amherstcoll-camp-pic.jpg"
 
+
+//adding dummy comment to test github actions
 function MainPage() {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0)
 
