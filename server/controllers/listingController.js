@@ -4,13 +4,22 @@ export const getAllListings = async (req, res) => {
     const { category, listing_type, min_price, max_price } = req.query
 
     let query = supabase
-        .from('listings')
-        .select('*, users(name, college, profile_picture)')
-        .eq('status', 'active')
-        .order('created_at', { ascending: false })
+    .from('listings')
+    .select(`
+      *,
+      users (
+        name,
+        profile_picture,
+        colleges (
+          name
+        )
+      )
+    `)
+    .eq('status_id', 1)
+    .order('created_at', { ascending: false })
 
-    if (category) query = query.eq('category', category)
-    if (listing_type) query = query.eq('listing_type', listing_type)
+    if (category) query = query.eq('category_id', category)
+    if (listing_type) query = query.eq('listing_type_id', listing_type)
     if (min_price) query = query.gte('price', min_price)
     if (max_price) query = query.lte('price', max_price)
 
