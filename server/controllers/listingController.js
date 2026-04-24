@@ -34,7 +34,16 @@ export const getListingById = async (req, res) => {
 
     const { data, error } = await supabase
         .from('listings')
-        .select('*, users(name, college, profile_picture)')
+        .select(`
+            *,
+            users (
+                name,
+                profile_picture,
+                colleges (
+                    name
+                )
+            )
+        `)
         .eq('id', id)
         .single()
 
@@ -43,12 +52,27 @@ export const getListingById = async (req, res) => {
 }
 
 export const createListing = async (req, res) => {
-    const { owner_id, title, description, price, category, listing_type, images } = req.body
+    const { owner_id, title, description, price, category_id, listing_type_id, images } = req.body
 
     const { data, error } = await supabase
         .from('listings')
-        .insert({ owner_id, title, description, price, category, listing_type, images })
-        .select()
+        .insert({
+            owner_id,
+            title,
+            description,
+            price,
+            category_id,
+            listing_type_id,
+            images
+        })
+        .select(`
+            *,
+            users (
+                name,
+                profile_picture,
+                colleges ( name )
+            )
+        `)
         .single()
 
     if (error) return res.status(500).json({ error: error.message })
@@ -61,9 +85,19 @@ export const updateListing = async (req, res) => {
 
     const { data, error } = await supabase
         .from('listings')
-        .update({ ...updates, updated_at: new Date().toISOString() })
+        .update({
+            ...updates,
+            updated_at: new Date().toISOString()
+        })
         .eq('id', id)
-        .select()
+        .select(`
+            *,
+            users (
+                name,
+                profile_picture,
+                colleges ( name )
+            )
+        `)
         .single()
 
     if (error) return res.status(500).json({ error: error.message })
