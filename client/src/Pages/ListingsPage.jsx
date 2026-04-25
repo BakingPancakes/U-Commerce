@@ -1,4 +1,3 @@
-
 import Navbar from '../Components/Navbar';
 
 //const ListingsPage = () => {
@@ -11,92 +10,45 @@ import Navbar from '../Components/Navbar';
 //};
 
 import "./ListingsPage.css";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
+import { fetchAllListings } from '../api/listingsAPI';
 
-const listingsData = [
-  {
-    id: 1,
-    title: "MacBook Air M1",
-    price: 650,
-    category: "Electronics",
-    condition: "Used - Good",
-    seller: "Riya",
-    rating: 4.8,
-    image:
-      "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    id: 2,
-    title: "Twin XL Bed Frame",
-    price: 90,
-    category: "Furniture",
-    condition: "Used - Fair",
-    seller: "Aman",
-    rating: 4.3,
-    image:
-      "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    id: 3,
-    title: "Calculus Textbook",
-    price: 25,
-    category: "Books",
-    condition: "Like New",
-    seller: "Sarah",
-    rating: 4.7,
-    image:
-      "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    id: 4,
-    title: "Desk Lamp",
-    price: 18,
-    category: "Home",
-    condition: "Used - Good",
-    seller: "Kevin",
-    rating: 4.4,
-    image:
-      "https://images.unsplash.com/photo-1540932239986-30128078f3c5?auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    id: 5,
-    title: "iPad 9th Gen",
-    price: 220,
-    category: "Electronics",
-    condition: "Used - Excellent",
-    seller: "Neha",
-    rating: 4.9,
-    image:
-      "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    id: 6,
-    title: "Study Chair",
-    price: 45,
-    category: "Furniture",
-    condition: "Used - Good",
-    seller: "David",
-    rating: 4.5,
-    image:
-      "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=80",
-  },
-];
-
-const ListingsPage = ()  => {
+const ListingsPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [sortOption, setSortOption] = useState("default");
+  const [listings, setListings] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const categories = ["All", ...new Set(listingsData.map((item) => item.category))];
+  const categories = ["All", ...new Set(listings.map((item) => item.categories.display_name))];
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const data = await fetchAllListings();
+        setListings(data);
+        setError(null);
+      } catch (err) {
+        setError(err.message);
+        console.error('Error fetching listings:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const filteredListings = useMemo(() => {
-    let filtered = listingsData.filter((item) => {
+    let filtered = listings.filter((item) => {
       const matchesSearch = item.title
         .toLowerCase()
         .includes(searchTerm.toLowerCase());
 
       const matchesCategory =
-        selectedCategory === "All" || item.category === selectedCategory;
+        selectedCategory === "All" || item.categories.display_name === selectedCategory;
 
       return matchesSearch && matchesCategory;
     });
@@ -110,7 +62,7 @@ const ListingsPage = ()  => {
     }
 
     return filtered;
-  }, [searchTerm, selectedCategory, sortOption]);
+  }, [searchTerm, selectedCategory, sortOption, listings]);
 
   return (
     <div className="app">
@@ -162,10 +114,18 @@ const ListingsPage = ()  => {
         </section>
 
         <section className="listings-grid">
-          {filteredListings.length > 0 ? (
+          {loading ? (
+            <div className="loading-state">
+              <p>Loading listings...</p>
+            </div>
+          ) : error ? (
+            <div className="error-state">
+              <p>Error: {error}</p>
+            </div>
+          ) : filteredListings.length > 0 ? (
             filteredListings.map((item) => (
               <article key={item.id} className="listing-card">
-                <img src={item.image} alt={item.title} className="listing-image" />
+                <img src={item.images} alt={item.title} className="listing-image" />
 
                 <div className="listing-content">
                   <div className="listing-top">
@@ -173,12 +133,13 @@ const ListingsPage = ()  => {
                     <span className="price">${item.price}</span>
                   </div>
 
-                  <p className="category">{item.category}</p>
+                  <p className="category">{item.categories?.display_name}</p>
+
 
                   <div className="meta">
                     <span>{item.condition}</span>
-                    <span>Seller: {item.seller}</span>
-                    <span>⭐ {item.rating}</span>
+                    <span>Seller: {item.users.name}</span>
+                    <span>Rating: {item.rating}</span>
                   </div>
 
                   <button className="view-btn">View Details</button>
@@ -196,6 +157,5 @@ const ListingsPage = ()  => {
     </div>
   );
 }
-
 
 export default ListingsPage;
