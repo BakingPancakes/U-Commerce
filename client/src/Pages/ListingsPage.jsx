@@ -12,8 +12,10 @@ import Navbar from '../Components/Navbar';
 import "./ListingsPage.css";
 import { useMemo, useState, useEffect } from "react";
 import { fetchAllListings } from '../api/listingsAPI';
+import { useNavigate } from "react-router-dom";
 
 const ListingsPage = () => {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [sortOption, setSortOption] = useState("default");
@@ -106,6 +108,13 @@ const ListingsPage = () => {
             <option value="highToLow">Price: High to Low</option>
             <option value="rating">Top Rated</option>
           </select>
+
+        <button
+            className="create-btn"
+            onClick={() => navigate("/listings/new")}
+          >
+            Create Listing
+          </button>
         </section>
 
         <section className="results-info">
@@ -142,7 +151,15 @@ const ListingsPage = () => {
                     <span>Rating: {item.rating}</span>
                   </div>
 
-                  <button className="view-btn">View Details</button>
+                  <button
+                    className="view-btn"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate(`/listings/${item.id}`);
+                    }}
+                  >
+                    View Details
+                  </button>
                 </div>
               </article>
             ))
