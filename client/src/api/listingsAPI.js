@@ -30,7 +30,15 @@ async function createListing(data) {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(data),
+    body: JSON.stringify({
+      owner_id: "f82c260a-3c04-43d9-995f-7670c184cd6c", // default user
+      title: data.title,
+      description: data.description,
+      price: data.price,
+      category_id: data.category_id,
+      listing_type_id: 1, // TEMPORARY until you add UI for this
+      images: data.image // your form uses "image", backend uses "images"
+    }),
   });
 
   if (!response.ok) {
@@ -45,7 +53,14 @@ async function updateListing(id, data) {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(data),
+    body: JSON.stringify({
+      title: data.title,
+      description: data.description,
+      price: data.price,
+      category_id: data.category_id,
+      listing_type_id: 1,
+      images: data.image
+    }),
   });
 
   if (!response.ok) {
