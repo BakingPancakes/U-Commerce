@@ -51,6 +51,14 @@ export const getListingById = async (req, res) => {
                 colleges (
                     name
                 )
+            ),
+            categories (
+              name,
+              display_name
+            ),
+            listing_types (
+              type,
+              display_name
             )
         `)
         .eq('id', id)

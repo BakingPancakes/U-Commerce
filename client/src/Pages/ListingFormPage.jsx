@@ -13,7 +13,6 @@ const ListingFormPage = ({ mode }) => {
     title: "",
     price: "",
     description: "",
-    condition: "",
     images: "",
     category_id: ""
   });
@@ -48,7 +47,6 @@ const ListingFormPage = ({ mode }) => {
           title: data.title || "",
           price: data.price || "",
           description: data.description || "",
-          condition: data.condition || "",
           images: data.images || "",
           category_id: data.categories?.id || "",
         });
@@ -126,13 +124,6 @@ const ListingFormPage = ({ mode }) => {
               value={formData.price}
               onChange={handleChange}
               required
-            />
-
-            <input
-              name="condition"
-              placeholder="Condition"
-              value={formData.condition}
-              onChange={handleChange}
             />
 
             <input
