@@ -133,3 +133,66 @@ export const getAllCategories = async (req, res) => {
   if (error) return res.status(500).json({ error: error.message })
   return res.status(200).json(data)
 }
+
+export const getListingComments = async (req, res) => {
+    const { id } = req.params
+
+    const { data, error } = await supabase
+    .from('comments')
+    .select(`
+      id,
+      comment,
+      rating,
+      created_at,
+      users:commenter_id (
+        name
+      )
+    `)
+    .eq('listing_id', id)
+    .order('created_at', { ascending: false })
+
+  if (error) return res.status(500).json({ error: error.message })
+  return res.status(200).json(data)
+}
+
+export const createComment = async (req, res) => {
+  const { commenter_id, listing_id, comment, rating } = req.body
+
+  const { data, error } = await supabase
+    .from('comments')
+    .insert([
+      { commenter_id, listing_id, comment, rating }
+    ])
+    .select()
+
+  if (error) return res.status(500).json({ error: error.message })
+  return res.status(201).json(data[0])
+}
+
+export const updateComment = async (req, res) => {
+  const { id } = req.params
+  const { comment, rating } = req.body
+
+  const { data, error } = await supabase
+    .from('comments')
+    .update({ comment, rating })
+    .eq('id', id)
+    .select()
+
+  if (error) return res.status(500).json({ error: error.message })
+  return res.status(200).json(data[0])
+}
+
+export const deleteComment = async (req, res) => {
+  const { id } = req.params
+
+  const { error } = await supabase
+    .from('comments')
+    .delete()
+    .eq('id', id)
+
+  if (error) return res.status(500).json({ error: error.message })
+  return res.status(200).json({ message: "Comment deleted" })
+}
+
+

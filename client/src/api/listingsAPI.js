@@ -65,4 +65,53 @@ async function deleteListing(id) {
   return response.json();
 }
 
-export { fetchAllListings, fetchListingById, createListing, updateListing, deleteListing, fetchAllListingCategories };
+async function fetchListingCommentById(id) {
+  const response = await fetch(`${API_BASE_URL}/listings/comments/${id}`);
+  if (!response.ok) {
+    throw new Error(`Failed to fetch listing by ID: ${id}`);
+  }
+  return response.json();
+}
+
+async function createListingComment(data) {
+  const response = await fetch(`${API_BASE_URL}/listings/comments`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to create listing comment: ${response.status}`);
+  }
+  return response.json();
+}
+
+async function updateListingComment(id, data) {
+  const response = await fetch(`${API_BASE_URL}/listings/comments/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to update comment: ${id}`);
+  }
+  return response.json();
+}
+
+async function deleteListingComment(id) {
+  const response = await fetch(`${API_BASE_URL}/listings/comments/${id}`, {
+    method: 'DELETE',
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to delete comment: ${id}`);
+  }
+  return response.json();
+}
+
+export { fetchAllListings, fetchListingById, createListing, updateListing, deleteListing, fetchAllListingCategories, fetchListingCommentById, createListingComment, updateListingComment, deleteListingComment };
