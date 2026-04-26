@@ -156,18 +156,23 @@ export const getListingComments = async (req, res) => {
 }
 
 export const createComment = async (req, res) => {
-  const { commenter_id, listing_id, comment, rating } = req.body
+  const { commenter_id, listing_id, comment, rating } = req.body;
 
   const { data, error } = await supabase
     .from('comments')
-    .insert([
-      { commenter_id, listing_id, comment, rating }
-    ])
-    .select()
+    .insert([{ commenter_id, listing_id, comment, rating }])
+    .select(`
+      id,
+      comment,
+      rating,
+      created_at,
+      users:commenter_id ( name )
+    `);
 
-  if (error) return res.status(500).json({ error: error.message })
-  return res.status(201).json(data[0])
-}
+  if (error) return res.status(500).json({ error: error.message });
+  return res.status(201).json(data[0]);
+};
+
 
 export const updateComment = async (req, res) => {
   const { id } = req.params
