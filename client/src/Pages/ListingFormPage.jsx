@@ -3,7 +3,7 @@ import Navbar from "../Components/Navbar";
 
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { fetchListingById, createListing, updateListing } from "../api/listingsAPI";
+import { fetchListingById, createListing, updateListing, fetchAllListingCategories } from "../api/listingsAPI";
 
 const ListingFormPage = ({ mode }) => {
   const { id } = useParams();
@@ -18,9 +18,25 @@ const ListingFormPage = ({ mode }) => {
     category_id: ""
   });
 
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(mode === "edit");
   const [error, setError] = useState("");
 
+  // Fetch categories on mount
+  useEffect(() => {
+    const loadCategories = async () => {
+      try {
+        const data = await fetchAllListingCategories();
+        setCategories(data);
+      } catch (err) {
+        console.error("Failed to load categories:", err);
+      }
+    };
+
+    loadCategories();
+  }, []);
+
+  // Load listing if editing
   useEffect(() => {
     if (mode !== "edit" || !id) return;
 
@@ -126,12 +142,20 @@ const ListingFormPage = ({ mode }) => {
               onChange={handleChange}
             />
 
-            <input
+            {/* CATEGORY DROPDOWN */}
+            <select
               name="category_id"
-              placeholder="Category ID"
               value={formData.category_id}
               onChange={handleChange}
-            />
+              required
+            >
+              <option value="">Select a category</option>
+              {categories.map((cat) => (
+                <option key={cat.id} value={cat.id}>
+                  {cat.display_name}
+                </option>
+              ))}
+            </select>
 
             <textarea
               name="description"
