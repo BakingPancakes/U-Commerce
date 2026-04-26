@@ -8,6 +8,14 @@ async function fetchAllListings() {
   return response.json();
 }
 
+async function fetchAllListingCategories() {
+  const response = await fetch(`${API_BASE_URL}/listings/categories`);
+  if (!response.ok) {
+    throw new Error(`Failed to fetch categories: ${response.status}`);
+  }
+  return response.json();
+}
+
 async function fetchListingById(id) {
   const response = await fetch(`${API_BASE_URL}/listings/${id}`);
   if (!response.ok) {
@@ -57,4 +65,4 @@ async function deleteListing(id) {
   return response.json();
 }
 
-export { fetchAllListings, fetchListingById, createListing, updateListing, deleteListing };
+export { fetchAllListings, fetchListingById, createListing, updateListing, deleteListing, fetchAllListingCategories };

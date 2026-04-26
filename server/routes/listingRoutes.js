@@ -4,10 +4,13 @@ import {
     getListingById,
     createListing,
     updateListing,
-    deleteListing
+    deleteListing,
+    getAllCategories
 } from '../controllers/listingController.js'
 
 const router = Router()
+
+router.get('/categories', getAllCategories)
 
 router.get('/', getAllListings)
 router.get('/:id', getListingById)
