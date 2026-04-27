@@ -17,10 +17,10 @@ const LoginBox = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (!isLoading && isAuthenticated) {
       navigate("/listings")
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, isLoading, navigate]);
 
   const login = () => {
     loginWithRedirect({authorizationParams: {screen_hint: "login"}});

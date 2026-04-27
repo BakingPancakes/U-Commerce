@@ -29,8 +29,16 @@
   border-radius: 4px;
   padding: 8px 15px;
   transition: background-color 0.3s ease;
+
+  position: absolute;
+  right: 1rem;
 }
 
 .login-button:hover {
   background-color: #e6b800; /* Slightly darker gold on hover */
+}
+
+.profile-button {
+  position: absolute;
+  right: 1rem;
 }
