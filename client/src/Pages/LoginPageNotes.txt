@@ -1,0 +1,15 @@
+=== Notes for auth0 integration ===
+
+How Auth0 api will work:
+call useAuth0() within page context (same file)
+While the user isn't authenticated, prevent some functionality within the page
+When the user clicks "Login" on the login page, loginwithredirect for login called
+When the user clicks "Register" on the login page, loginwithredirect for singup called
+While the user is authenticated, allow some functionality, including:
+    accessing a profile page which is otherwise empty or redirected from
+    Listings page has more option for viewing (like a wishlist)
+    Listings themselves have more interactibility
+
+Buttons the user should see and their functionality:
+login top right on navbar -> calls loginwithredirect
+logout top right on navbar -> calls logout for auth0
