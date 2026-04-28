@@ -55,7 +55,6 @@ const ListingDetailPage = () => {
                 <h1>{listing.title}</h1>
                 <p className="detail-price">${listing.price}</p>
                 <p><strong>Category:</strong> {listing.categories?.display_name || "Uncategorized"}</p>
-                <p><strong>Condition:</strong> {listing.condition || "N/A"}</p>
                 <p><strong>Seller:</strong> {listing.users?.name || "Unknown seller"}</p>
                 <p><strong>Description:</strong> {listing.description || "No description available."}</p>
 

@@ -8,6 +8,14 @@ async function fetchAllListings() {
   return response.json();
 }
 
+async function fetchAllListingCategories() {
+  const response = await fetch(`${API_BASE_URL}/listings/categories`);
+  if (!response.ok) {
+    throw new Error(`Failed to fetch categories: ${response.status}`);
+  }
+  return response.json();
+}
+
 async function fetchListingById(id) {
   const response = await fetch(`${API_BASE_URL}/listings/${id}`);
   if (!response.ok) {
@@ -22,7 +30,15 @@ async function createListing(data) {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(data),
+    body: JSON.stringify({
+      owner_id: "f82c260a-3c04-43d9-995f-7670c184cd6c", // default user
+      title: data.title,
+      description: data.description,
+      price: data.price,
+      category_id: data.category_id,
+      listing_type_id: 1, // TEMPORARY until you add UI for this
+      images: data.image // your form uses "image", backend uses "images"
+    }),
   });
 
   if (!response.ok) {
@@ -37,7 +53,14 @@ async function updateListing(id, data) {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(data),
+    body: JSON.stringify({
+      title: data.title,
+      description: data.description,
+      price: data.price,
+      category_id: data.category_id,
+      listing_type_id: 1,
+      images: data.image
+    }),
   });
 
   if (!response.ok) {
@@ -57,4 +80,53 @@ async function deleteListing(id) {
   return response.json();
 }
 
-export { fetchAllListings, fetchListingById, createListing, updateListing, deleteListing };
+async function fetchListingCommentById(id) {
+  const response = await fetch(`${API_BASE_URL}/listings/comments/${id}`);
+  if (!response.ok) {
+    throw new Error(`Failed to fetch listing by ID: ${id}`);
+  }
+  return response.json();
+}
+
+async function createListingComment(data) {
+  const response = await fetch(`${API_BASE_URL}/listings/comments`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to create listing comment: ${response.status}`);
+  }
+  return response.json();
+}
+
+async function updateListingComment(id, data) {
+  const response = await fetch(`${API_BASE_URL}/listings/comments/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to update comment: ${id}`);
+  }
+  return response.json();
+}
+
+async function deleteListingComment(id) {
+  const response = await fetch(`${API_BASE_URL}/listings/comments/${id}`, {
+    method: 'DELETE',
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to delete comment: ${id}`);
+  }
+  return response.json();
+}
+
+export { fetchAllListings, fetchListingById, createListing, updateListing, deleteListing, fetchAllListingCategories, fetchListingCommentById, createListingComment, updateListingComment, deleteListingComment };
