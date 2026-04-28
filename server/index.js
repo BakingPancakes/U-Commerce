@@ -19,13 +19,15 @@ app.use(express.json())
 
 // configure auth middleware
 export const checkJwt = auth({
-    issuerBaseURL: "dev-ha77yk6xwh4lfapo.us.auth0.com",
+    issuerBaseURL: "https://dev-ha77yk6xwh4lfapo.us.auth0.com",
+
+    // This isn't a real URL, it is only a key to tell Auth0 which API we want to connect to
     audience: "https://u-commerce.com/api",
     tokenSigningAlg: 'RS256',
 })
 
 // error handling
-app.use((err, req, res, next) => {
+app.use((err, _req, res, _next) => {
   console.error(err.stack);
   
   const status = err.status || 500;
@@ -36,7 +38,6 @@ app.use((err, req, res, next) => {
     message: status === 401 ? 'Authentication required' : message,
   });
 });
-
 
 // API routes
 app.use('/api/users', checkJwt, userRoutes)
@@ -53,7 +54,6 @@ router.get('/connection-test', (req, res) => {
 });
 
 */
-
 
 //test the backend
 app.get('/test', (req, res) => {
