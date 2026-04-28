@@ -11,7 +11,10 @@ createRoot(document.getElementById('root')).render(
     <Auth0Provider
       domain="dev-ha77yk6xwh4lfapo.us.auth0.com"
       clientId="xO1DcDwh5AhtV8Ieq5TMtWSXBQ6u9eiB"
-      authorizationParams={{ redirect_uri: window.location.origin }}
+      authorizationParams={{
+        redirect_uri: window.location.origin,
+        audience: "https://u-commerce.com/api",
+      }}
       useRefreshTokens={true}
       cacheLocation='localstorage'
       >

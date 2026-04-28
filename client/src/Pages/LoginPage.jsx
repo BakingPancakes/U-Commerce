@@ -72,6 +72,7 @@ const LoginBox = () => {
   );
 
   if (error) {
+    console.error(error)
     return ErrorBox;
   }
 

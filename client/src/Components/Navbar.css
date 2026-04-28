@@ -23,22 +23,23 @@
   border-radius: 4px;
 }
 
+.profile-options {
+  position: absolute;
+  right: 1rem;
+  top: 10px;
+  display:flex;
+  max-width: fit-content;
+  flex-direction: row;
+}
+
 .login-button {
   background-color: #ffcc00; /* Umass Amherst gold/yellow accent */
   color: #333;
   border-radius: 4px;
   padding: 8px 15px;
   transition: background-color 0.3s ease;
-
-  position: absolute;
-  right: 1rem;
 }
 
 .login-button:hover {
   background-color: #e6b800; /* Slightly darker gold on hover */
-}
-
-.profile-button {
-  position: absolute;
-  right: 1rem;
 }
