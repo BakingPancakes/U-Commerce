@@ -23,7 +23,17 @@
   border-radius: 4px;
 }
 
+.profile-options {
+  position: absolute;
+  right: 1rem;
+  top: 10px;
+  display:flex;
+  max-width: fit-content;
+  flex-direction: row;
+}
+
 .login-button {
+  margin-left: 15px;
   background-color: #ffcc00; /* Umass Amherst gold/yellow accent */
   color: #333;
   border-radius: 4px;

@@ -3,7 +3,7 @@ import { getUserByID, createUser, updateUser } from '../controllers/userControll
 
 const router = Router()
 
-router.get('/:id', getUserByID)
+router.get('/', getUserByID)
 router.post('/', createUser)
 router.put('/:id', updateUser)
 

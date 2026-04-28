@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 // import { Router } from "express";
 import userRoutes from './routes/userRoutes.js'
 import listingRoutes from './routes/listingRoutes.js'
+import { auth } from "express-oauth2-jwt-bearer"
 
 
 const PORT = 3000
@@ -16,8 +17,30 @@ dotenv.config()
 app.use(cors())
 app.use(express.json())
 
+// configure auth middleware
+export const checkJwt = auth({
+    issuerBaseURL: "https://dev-ha77yk6xwh4lfapo.us.auth0.com",
+
+    // This isn't a real URL, it is only a key to tell Auth0 which API we want to connect to
+    audience: "https://u-commerce.com/api",
+    tokenSigningAlg: 'RS256',
+})
+
+// error handling
+app.use((err, _req, res, _next) => {
+  console.error(err.stack);
+  
+  const status = err.status || 500;
+  const message = err.message || 'Internal Server Error';
+  
+  res.status(status).json({
+    error: err.code || 'unauthorized',
+    message: status === 401 ? 'Authentication required' : message,
+  });
+});
+
 // API routes
-app.use('/api/users', userRoutes)
+app.use('/api/users', checkJwt, userRoutes)
 app.use('/api/listings', listingRoutes)
 
 /*
