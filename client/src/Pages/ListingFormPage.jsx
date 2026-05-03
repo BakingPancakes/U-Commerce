@@ -3,30 +3,51 @@ import Navbar from "../Components/Navbar";
 
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { fetchListingById, createListing, updateListing } from "../api/listingsAPI";
-
+import { fetchListingById, createListing, updateListing, fetchAllListingCategories } from "../api/listingsAPI";
 
 const ListingFormPage = ({ mode }) => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState({title: "", price: "", description: "", condition: "", image: "", category_id: ""});
+  const [formData, setFormData] = useState({
+    title: "",
+    price: "",
+    description: "",
+    images: "",
+    category_id: ""
+  });
 
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(mode === "edit");
   const [error, setError] = useState("");
 
+  // Fetch categories on mount
+  useEffect(() => {
+    const loadCategories = async () => {
+      try {
+        const data = await fetchAllListingCategories();
+        setCategories(data);
+      } catch (err) {
+        console.error("Failed to load categories:", err);
+      }
+    };
+
+    loadCategories();
+  }, []);
+
+  // Load listing if editing
   useEffect(() => {
     if (mode !== "edit" || !id) return;
 
     const loadListing = async () => {
       try {
         const data = await fetchListingById(id);
+
         setFormData({
           title: data.title || "",
           price: data.price || "",
           description: data.description || "",
-          condition: data.condition || "",
-          image: data.images || "",
+          images: data.images || "",
           category_id: data.categories?.id || "",
         });
       } catch (err) {
@@ -47,32 +68,28 @@ const ListingFormPage = ({ mode }) => {
     }));
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  
-  //   try {
-  //     console.log("Mock listing created:", formData);
-  
-  //     alert(
-  //       mode === "edit"
-  //         ? "Mock edit successful"
-  //         : "Mock create successful"
-  //     );
-  
-  //     navigate("/listings");
-  //   } catch (err) {
-  //     setError(err.message || "Failed to save listing");
-  //   }
-  // };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       if (mode === "edit") {
-        await updateListing(id, formData);
+        await updateListing(id, {
+          title: formData.title,
+          description: formData.description,
+          price: formData.price,
+          category_id: formData.category_id,
+          listing_type_id: 1,
+          images: formData.images
+        });
       } else {
-        await createListing(formData);
+        await createListing({
+          title: formData.title,
+          description: formData.description,
+          price: formData.price,
+          category_id: formData.category_id,
+          listing_type_id: 1,
+          images: formData.images
+        });
       }
 
       navigate("/listings");
@@ -80,7 +97,6 @@ const ListingFormPage = ({ mode }) => {
       setError(err.message || "Failed to save listing");
     }
   };
-
 
   return (
     <div className="form-page">
@@ -111,25 +127,26 @@ const ListingFormPage = ({ mode }) => {
             />
 
             <input
-              name="condition"
-              placeholder="Condition"
-              value={formData.condition}
-              onChange={handleChange}
-            />
-
-            <input
-              name="image"
+              name="images"
               placeholder="Image URL"
-              value={formData.image}
+              value={formData.images}
               onChange={handleChange}
             />
 
-            <input
+            {/* CATEGORY DROPDOWN */}
+            <select
               name="category_id"
-              placeholder="Category ID"
               value={formData.category_id}
               onChange={handleChange}
-            />
+              required
+            >
+              <option value="">Select a category</option>
+              {categories.map((cat) => (
+                <option key={cat.id} value={cat.id}>
+                  {cat.display_name}
+                </option>
+              ))}
+            </select>
 
             <textarea
               name="description"

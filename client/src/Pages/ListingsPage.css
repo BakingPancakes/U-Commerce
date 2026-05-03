@@ -14,8 +14,9 @@ body {
   min-height: 100vh;
 }
 
+/* UMass Maroon Hero */
 .hero {
-  background: linear-gradient(135deg, #1d4ed8, #2563eb);
+  background: linear-gradient(135deg, #881c1c, #b91c1c);
   color: white;
   padding: 60px 20px;
 }
@@ -122,9 +123,10 @@ body {
   font-size: 1.1rem;
 }
 
+/* Price in UMass Maroon */
 .price {
   font-weight: bold;
-  color: #2563eb;
+  color: #881c1c;
   font-size: 1.05rem;
 }
 
@@ -144,12 +146,13 @@ body {
   margin-bottom: 16px;
 }
 
+/* View Button — UMass Red */
 .view-btn {
   width: 100%;
   padding: 12px;
   border: none;
   border-radius: 10px;
-  background: #2563eb;
+  background: #b91c1c;
   color: white;
   font-weight: 600;
   cursor: pointer;
@@ -157,7 +160,7 @@ body {
 }
 
 .view-btn:hover {
-  background: #1d4ed8;
+  background: #881c1c;
 }
 
 .empty-state {
@@ -189,11 +192,12 @@ body {
   }
 }
 
+/* Create Button — UMass Green replaced with UMass Red */
 .create-btn {
   border: none;
   border-radius: 10px;
   padding: 12px 16px;
-  background: #16a34a;
+  background: #b91c1c;
   color: white;
   font-weight: 600;
   cursor: pointer;
@@ -201,7 +205,7 @@ body {
 }
 
 .create-btn:hover {
-  background: #15803d;
+  background: #881c1c;
   transform: translateY(-1px);
 }
 

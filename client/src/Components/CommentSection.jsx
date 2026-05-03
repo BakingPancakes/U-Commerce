@@ -1,38 +1,55 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { fetchListingCommentById, createListingComment } from "../api/listingsAPI";
 import "./CommentSection.css";
 
 const CommentSection = ({ listingId }) => {
-  const [comments, setComments] = useState([
-    { id: 1, author: "Alice", text: "Is this still available?" },
-    { id: 2, author: "Bob", text: "Can you share more pictures?" },
-  ]);
+  const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
 
-  const handleSubmit = (e) => {
+  // Fetch comments when listingId changes
+  useEffect(() => {
+    async function loadComments() {
+      try {
+        const data = await fetchListingCommentById(listingId);
+        setComments(data);
+      } catch (err) {
+        console.error("Failed to load comments:", err);
+      }
+    }
+
+    loadComments();
+  }, [listingId]);
+
+  // Submit new comment
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!newComment.trim()) return;
 
-    const comment = {
-      id: Date.now(),
-      author: "Current User",
-      text: newComment,
-      listingId,
-    };
+    try {
+      await createListingComment({
+        commenter_id: "f82c260a-3c04-43d9-995f-7670c184cd6c",
+        listing_id: listingId,
+        comment: newComment,
+        rating: null,
+      });
 
-    setComments((prev) => [...prev, comment]);
-    setNewComment("");
+      // Refresh the page to reload comments with correct username
+      window.location.reload();
+    } catch (err) {
+      console.error("Failed to create comment:", err);
+    }
   };
-
+  
   return (
     <section className="comments-section">
       <h2>Comments</h2>
 
       <div className="comments-list">
         {comments.length > 0 ? (
-          comments.map((comment) => (
-            <div key={comment.id} className="comment-card">
-              <p className="comment-author">{comment.author}</p>
-              <p>{comment.text}</p>
+          comments.map((c) => (
+            <div key={c.id} className="comment-card">
+              <p className="comment-author">{c.users?.name || "Unknown User"}</p>
+              <p>{c.comment}</p>
             </div>
           ))
         ) : (
