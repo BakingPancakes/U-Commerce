@@ -31,3 +31,21 @@ export async function createUser(token, sub, email, name, college_id) {
 
     return response.json()
 }
+
+export async function updateUser(token, userId, updates) {
+  const res = await fetch(`${API_BASE_URL}/users/${userId}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify(updates)
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to update user");
+  }
+
+  return res.json();
+}
+

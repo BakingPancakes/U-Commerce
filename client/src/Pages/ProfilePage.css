@@ -197,3 +197,34 @@
       font-size: 2rem;
     }
   }
+
+  .bio-textarea {
+  width: 100%;
+  min-height: 80px;
+  padding: 8px;
+  margin-top: 6px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  resize: vertical;
+}
+
+.bio-buttons {
+  margin-top: 8px;
+  display: flex;
+  gap: 10px;
+}
+
+.save-btn, .cancel-btn {
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.save-btn {
+  background: #4caf50;
+  color: white;
+}
+
+.cancel-btn {
+  background: #ccc;
+}

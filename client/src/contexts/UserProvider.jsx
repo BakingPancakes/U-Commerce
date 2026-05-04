@@ -22,6 +22,17 @@ export const UserProvider = ({children}) => {
         return data;
     }
 
+    const refreshProfile = async () => {
+        try {
+            const token = await getAccessTokenSilently();
+            const updated = await fetchUserByID(token);
+            setProfile(updated);
+        } catch (err) {
+            console.error("Failed to refresh profile:", err);
+        }
+    };
+
+
     useEffect(() => {
         if (isLoading || !isAuthenticated) return;
 
@@ -52,7 +63,7 @@ export const UserProvider = ({children}) => {
     }, [isAuthenticated, isLoading]);
 
     return (
-        <UserContext.Provider value={{profile, profileReady}}>
+        <UserContext.Provider value={{profile, profileReady, refreshProfile}}>
             {children}
         </UserContext.Provider>
     );

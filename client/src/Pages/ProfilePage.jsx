@@ -4,19 +4,8 @@ import { fetchListingByUserId } from "../api/listingsAPI";
 import { useState, useEffect } from "react";
 import { useProfile } from "../contexts/UserHooks";
 import { getCollegeName } from "../utils";
-
-
-//const mockUser = {
-//  id: 1,
-//  name: "Rudraksh Sharma",
-//  email: "rudraksh@example.com",
-//  university: "UMass Amherst",
-//  major: "Computer Science",
-//  bio: "Graduate student who loves buying and selling useful college items.",
-//  joined: "January 2026",
-//  avatar:
-//    "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80",
-//};
+import { updateUser } from "../api/userAPI";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const likedListings = [
   {
@@ -74,11 +63,13 @@ function ListingCard({ item }) {
 
 
 function ProfilePage() {
+  const { profile, profileReady, refreshProfile } = useProfile();
+  const { getAccessTokenSilently } = useAuth0();
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  const { profile, profileReady } = useProfile();
+  const [editingBio, setEditingBio] = useState(false);
+  const [bioDraft, setBioDraft] = useState("");
 
    useEffect(() => {
     const fetchData = async () => {
@@ -86,7 +77,7 @@ function ProfilePage() {
 
       try {
         setLoading(true);
-        const data = await fetchListingByUserId("f82c260a-3c04-43d9-995f-7670c184cd6c");//hardcoded user for now
+        const data = await fetchListingByUserId(profile.id);//hardcoded user for now
         setListings(data);
         setError(null);
       } catch (err) {
@@ -99,6 +90,30 @@ function ProfilePage() {
 
     fetchData();
   }, [profileReady, profile]);
+
+  const handleSaveBio = async () => {
+    try {
+      const token = await getAccessTokenSilently();
+
+      await updateUser(token, profile.id, { bio: bioDraft });
+
+      // Refresh global profile state
+      await refreshProfile();
+
+      setEditingBio(false);
+    } catch (err) {
+      console.error("Failed to update bio:", err);
+    }
+  }
+
+  useEffect(() => {
+    if (profileReady && profile) {
+      setBioDraft(profile.bio || "");
+    }
+  }, [profileReady]);
+
+
+
 
   if (!profileReady) {
     return (
@@ -129,11 +144,32 @@ function ProfilePage() {
             <p><strong>Email:</strong> {profile.email}</p>
             <p><strong>University:</strong> {getCollegeName(profile.college_id)}</p>
             <p><strong>Joined:</strong> {formatJoinDate(profile.created_at)}</p>
-            <p><strong>Bio:</strong> {profile.bio}</p>
+            <div className="profile-bio-section">
+              <strong>Bio:</strong>
 
-            <div className="profile-buttons">
-              <button className="edit-profile-btn">Edit Profile</button>
+              {editingBio ? (
+                <>
+                  <textarea
+                    className="bio-textarea"
+                    value={bioDraft}
+                    onChange={(e) => setBioDraft(e.target.value)}
+                  />
+
+                  <div className="bio-buttons">
+                    <button className="save-btn" onClick={handleSaveBio}>Save</button>
+                    <button className="cancel-btn" onClick={() => setEditingBio(false)}>Cancel</button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <p>{profile.bio || "No bio yet."}</p>
+                  <button className="edit-profile-btn" onClick={() => setEditingBio(true)}>
+                    Edit Bio
+                  </button>
+                </>
+              )}
             </div>
+
           </div>
         </section>
 
