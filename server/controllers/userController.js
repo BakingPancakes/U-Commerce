@@ -13,21 +13,34 @@ export const getUserByID = async (req, res) => {
 }
 
 export const createUser = async (req, res) => {
-    const { sub, email, name, college } = req.body
-    const auth0_id = sub
-    const bio = college; // I can not figure out how to associate with college_id so this is my workaround
-    console.log("creating user with id:", sub)
+    const { sub, email, name, college_id } = req.body;
+
+    const auth0_id = sub;
+    const bio = "Update Your Default Bio"; // default bio
+
+    //console.log("creating user with id:", sub);
+    //console.log("Incoming body:", req.body);
+    
     const { data, error } = await supabase
         .from('users')
-        .insert({ auth0_id, email, name, bio })
+        .insert({
+            auth0_id,
+            email,
+            name,
+            college_id,
+            bio           
+        })
         .select()
-        .single()
+        .single();
+
     if (error) {
-        console.log("Supabase error:", error)
-        return res.status(500).json({ error: error.message })
+        console.log("Supabase error:", error);
+        return res.status(500).json({ error: error.message });
     }
-    return res.status(201).json(data)
-}
+
+    return res.status(201).json(data);
+};
+
 
 export const updateUser = async (req, res) => {
     const { id } = req.params

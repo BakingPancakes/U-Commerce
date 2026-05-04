@@ -15,14 +15,14 @@ export async function fetchUserByID(token) {
   return response.json();
 }
 
-export async function createUser(token, sub, email, name, college) {
+export async function createUser(token, sub, email, name, college_id) {
     const response = await fetch(`${API_BASE_URL}/users`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`
         }, 
-        body: JSON.stringify({sub, email, name, college}),
+        body: JSON.stringify({sub, email, name, college_id}),
     });
 
     if (!response.ok) {

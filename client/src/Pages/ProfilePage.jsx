@@ -2,18 +2,21 @@ import "./ProfilePage.css";
 import Navbar from "../Components/Navbar";
 import { fetchListingByUserId } from "../api/listingsAPI";
 import { useState, useEffect } from "react";
+import { useProfile } from "../contexts/UserHooks";
+import { getCollegeName } from "../utils";
 
-const mockUser = {
-  id: 1,
-  name: "Rudraksh Sharma",
-  email: "rudraksh@example.com",
-  university: "UMass Amherst",
-  major: "Computer Science",
-  bio: "Graduate student who loves buying and selling useful college items.",
-  joined: "January 2026",
-  avatar:
-    "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80",
-};
+
+//const mockUser = {
+//  id: 1,
+//  name: "Rudraksh Sharma",
+//  email: "rudraksh@example.com",
+//  university: "UMass Amherst",
+//  major: "Computer Science",
+//  bio: "Graduate student who loves buying and selling useful college items.",
+//  joined: "January 2026",
+//  avatar:
+//    "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80",
+//};
 
 const likedListings = [
   {
@@ -33,6 +36,16 @@ const likedListings = [
       "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=800&q=80",
   },
 ];
+
+function formatJoinDate(dateString) {
+  const date = new Date(dateString);
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric"
+  });
+}
+
 
 function ListingCard({ item }) {
   return (
@@ -64,8 +77,13 @@ function ProfilePage() {
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const { profile, profileReady } = useProfile();
+
    useEffect(() => {
     const fetchData = async () => {
+      if (!profileReady || !profile?.id) return;
+
       try {
         setLoading(true);
         const data = await fetchListingByUserId("f82c260a-3c04-43d9-995f-7670c184cd6c");//hardcoded user for now
@@ -80,8 +98,16 @@ function ProfilePage() {
     };
 
     fetchData();
-  }, []);
+  }, [profileReady, profile]);
 
+  if (!profileReady) {
+    return (
+      <div className="profile-page">
+        <Navbar />
+        <p className="loading-state">Loading profile...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="profile-page">
@@ -96,15 +122,14 @@ function ProfilePage() {
 
       <main className="profile-container">
         <section className="profile-info-card">
-          <img src={mockUser.avatar} alt={mockUser.name} className="profile-avatar" />
+          <img src={profile.avatar} alt={profile.name} className="profile-avatar" />
 
           <div className="profile-info-text">
-            <h2>{mockUser.name}</h2>
-            <p><strong>Email:</strong> {mockUser.email}</p>
-            <p><strong>University:</strong> {mockUser.university}</p>
-            <p><strong>Major:</strong> {mockUser.major}</p>
-            <p><strong>Joined:</strong> {mockUser.joined}</p>
-            <p><strong>Bio:</strong> {mockUser.bio}</p>
+            <h2>{profile.name}</h2>
+            <p><strong>Email:</strong> {profile.email}</p>
+            <p><strong>University:</strong> {getCollegeName(profile.college_id)}</p>
+            <p><strong>Joined:</strong> {formatJoinDate(profile.created_at)}</p>
+            <p><strong>Bio:</strong> {profile.bio}</p>
 
             <div className="profile-buttons">
               <button className="edit-profile-btn">Edit Profile</button>

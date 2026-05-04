@@ -10,13 +10,14 @@ export const UserProvider = ({children}) => {
     const [profileReady, setProfileReady] = useState(false);
 
     const handleNewUser = async (token, user) => {
-        console.log("creating user with data:", getCollege(user.email));
+        //console.log("creating user with data:", getCollege(user.email));
+        const college_id = getCollege(user.email)
         const data = await createUser(
             token,
             user.sub,
             user.email,
             user.name,
-            getCollege(user.email),
+            college_id
         );
         return data;
     }
