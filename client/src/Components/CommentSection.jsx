@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import { fetchListingCommentById, createListingComment } from "../api/listingsAPI";
 import "./CommentSection.css";
+import { useProfile } from "../contexts/UserHooks";
 
 const CommentSection = ({ listingId }) => {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
+  const { profile, profileReady } = useProfile();
+
 
   // Fetch comments when listingId changes
   useEffect(() => {
@@ -27,7 +30,7 @@ const CommentSection = ({ listingId }) => {
 
     try {
       await createListingComment({
-        commenter_id: "f82c260a-3c04-43d9-995f-7670c184cd6c",
+        commenter_id: profile.id,
         listing_id: listingId,
         comment: newComment,
         rating: null,
@@ -40,6 +43,10 @@ const CommentSection = ({ listingId }) => {
     }
   };
   
+  if (!profileReady) {
+    return <p>Loading comments...</p>;
+  }
+
   return (
     <section className="comments-section">
       <h2>Comments</h2>
