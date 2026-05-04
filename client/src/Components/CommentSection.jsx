@@ -8,6 +8,7 @@ const CommentSection = ({ listingId }) => {
   const [newComment, setNewComment] = useState("");
   const { profile } = useProfile();
 
+  const [rating, setRating] = useState(null);
 
   // Fetch comments when listingId changes
   useEffect(() => {
@@ -33,10 +34,9 @@ const CommentSection = ({ listingId }) => {
         commenter_id: profile.id,
         listing_id: listingId,
         comment: newComment,
-        rating: null,
+        rating: rating,
       });
 
-      // Refresh the page to reload comments with correct username
       window.location.reload();
     } catch (err) {
       console.error("Failed to create comment:", err);
@@ -52,6 +52,9 @@ const CommentSection = ({ listingId }) => {
           comments.map((c) => (
             <div key={c.id} className="comment-card">
               <p className="comment-author">{c.users?.name || "Unknown User"}</p>
+              <p className="comment-rating">
+                {c.rating ? "⭐".repeat(c.rating) : "No rating"}
+              </p>
               <p>{c.comment}</p>
             </div>
           ))
@@ -68,6 +71,19 @@ const CommentSection = ({ listingId }) => {
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
           />
+          <select
+            value={rating || ""}
+            onChange={(e) => setRating(Number(e.target.value))}
+            className="rating-select"
+            required
+          >
+            <option value="">Select rating</option>
+            <option value="1">⭐ 1</option>
+            <option value="2">⭐ 2</option>
+            <option value="3">⭐ 3</option>
+            <option value="4">⭐ 4</option>
+            <option value="5">⭐ 5</option>
+          </select>
           <button type="submit">Post Comment</button>
         </form>
       ) : (

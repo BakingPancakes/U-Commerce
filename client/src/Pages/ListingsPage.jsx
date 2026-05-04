@@ -65,7 +65,7 @@ const ListingsPage = () => {
     } else if (sortOption === "highToLow") {
       filtered = [...filtered].sort((a, b) => b.price - a.price);
     } else if (sortOption === "rating") {
-      filtered = [...filtered].sort((a, b) => b.rating - a.rating);
+      filtered = [...filtered].sort((a, b) => b.average_rating - a.average_rating);
     }
 
     return filtered;
@@ -163,7 +163,7 @@ const ListingsPage = () => {
                   <div className="meta">
                     <span>{item.condition}</span>
                     <span>Seller: {item.users.name}</span>
-                    <span>Rating: {item.rating}</span>
+                    <span>Rating: {item.average_rating}</span>
                   </div>
 
                   <button
