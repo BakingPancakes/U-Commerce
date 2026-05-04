@@ -115,14 +115,12 @@ function ProfilePage() {
     }
   }
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => {
     if (profileReady && profile) {
       setBioDraft(profile.bio || "");
     }
   }, [profileReady, profile]);
-
-
-
 
   if (!profileReady) {
     return (
