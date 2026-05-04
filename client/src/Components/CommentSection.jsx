@@ -6,7 +6,7 @@ import { useProfile } from "../contexts/UserHooks";
 const CommentSection = ({ listingId }) => {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
-  const { profile, profileReady } = useProfile();
+  const { profile } = useProfile();
 
 
   // Fetch comments when listingId changes
@@ -42,10 +42,6 @@ const CommentSection = ({ listingId }) => {
       console.error("Failed to create comment:", err);
     }
   };
-  
-  if (!profileReady) {
-    return <p>Loading comments...</p>;
-  }
 
   return (
     <section className="comments-section">
@@ -64,15 +60,22 @@ const CommentSection = ({ listingId }) => {
         )}
       </div>
 
-      <form className="comment-form" onSubmit={handleSubmit}>
-        <textarea
-          placeholder="Write a comment..."
-          rows="4"
-          value={newComment}
-          onChange={(e) => setNewComment(e.target.value)}
-        />
-        <button type="submit">Post Comment</button>
-      </form>
+      {profile ? (
+        <form className="comment-form" onSubmit={handleSubmit}>
+          <textarea
+            placeholder="Write a comment..."
+            rows="4"
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+          />
+          <button type="submit">Post Comment</button>
+        </form>
+      ) : (
+        <p className="comment-login-message">
+          You must be signed in to post a comment.
+        </p>
+      )}
+
     </section>
   );
 };
