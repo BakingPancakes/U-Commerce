@@ -119,7 +119,7 @@ function ProfilePage() {
     if (profileReady && profile) {
       setBioDraft(profile.bio || "");
     }
-  }, [profileReady]);
+  }, [profileReady, profile]);
 
 
 

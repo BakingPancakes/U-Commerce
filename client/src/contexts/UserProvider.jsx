@@ -60,7 +60,7 @@ export const UserProvider = ({children}) => {
             }
         }
         fetchProfile();
-    }, [isAuthenticated, isLoading]);
+    }, [isAuthenticated, isLoading, getAccessTokenSilently, logout, user]);
 
     return (
         <UserContext.Provider value={{profile, profileReady, refreshProfile}}>
