@@ -4,8 +4,13 @@ import Navbar from "../Components/Navbar";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { fetchListingById, createListing, updateListing, fetchAllListingCategories } from "../api/listingsAPI";
+import { useProfile } from "../contexts/UserHooks";
+
+import { useAuth0 } from "@auth0/auth0-react";
 
 const ListingFormPage = ({ mode }) => {
+  
+  const { getAccessTokenSilently } = useAuth0();
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -20,6 +25,8 @@ const ListingFormPage = ({ mode }) => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(mode === "edit");
   const [error, setError] = useState("");
+
+  const { profile, profileReady } = useProfile();
 
   // Fetch categories on mount
   useEffect(() => {
@@ -70,33 +77,42 @@ const ListingFormPage = ({ mode }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    
     try {
+      
+      const token = await getAccessTokenSilently();
+    
+      const payload = {
+        title: formData.title,
+        description: formData.description,
+        price: formData.price,
+        category_id: formData.category_id,
+        listing_type_id: 1,
+        images: formData.images,
+        user_id: profile.id   // ← HERE
+      };
+    
       if (mode === "edit") {
-        await updateListing(id, {
-          title: formData.title,
-          description: formData.description,
-          price: formData.price,
-          category_id: formData.category_id,
-          listing_type_id: 1,
-          images: formData.images
-        });
+        await updateListing(id, payload, token);
       } else {
-        await createListing({
-          title: formData.title,
-          description: formData.description,
-          price: formData.price,
-          category_id: formData.category_id,
-          listing_type_id: 1,
-          images: formData.images
-        });
+        await createListing(payload, token);
       }
-
+    
       navigate("/listings");
     } catch (err) {
       setError(err.message || "Failed to save listing");
     }
   };
+
+
+  if (!profileReady) {
+    return (
+      <div className="form-page">
+        <Navbar />
+        <p>Loading user...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="form-page">

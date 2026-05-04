@@ -6,6 +6,8 @@ import { useProfile } from "../contexts/UserHooks";
 import { getCollegeName } from "../utils";
 import { updateUser } from "../api/userAPI";
 import { useAuth0 } from "@auth0/auth0-react";
+import { useNavigate } from "react-router-dom";
+
 
 const likedListings = [
   {
@@ -37,6 +39,7 @@ function formatJoinDate(dateString) {
 
 
 function ListingCard({ item }) {
+  const navigate = useNavigate();
   return (
     <article className="profile-listing-card">
       <img
@@ -55,7 +58,13 @@ function ListingCard({ item }) {
           {item.categories?.display_name || "No category"}
         </p>
 
-        <button className="profile-action-btn">View Listing</button>
+        <button
+          className="profile-action-btn"
+          onClick={() => navigate(`/listings/${item.id}`)}
+        >
+          View Listing
+        </button>
+
       </div>
     </article>
   );

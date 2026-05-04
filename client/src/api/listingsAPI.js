@@ -39,7 +39,7 @@ async function createListing(data) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      owner_id: "f82c260a-3c04-43d9-995f-7670c184cd6c", // default user
+      owner_id: data.user_id, // default user
       title: data.title,
       description: data.description,
       price: data.price,
