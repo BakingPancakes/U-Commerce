@@ -60,12 +60,12 @@
     padding: 12px 18px;
     font-weight: 600;
     cursor: pointer;
-    background: #2563eb;
+    background: #b91c1c;
     color: white;
     transition: background 0.2s ease, transform 0.2s ease;
   }
   
   .comment-form button:hover {
-    background: #1d4ed8;
+    background: #881c1c;
     transform: translateY(-1px);
   }
