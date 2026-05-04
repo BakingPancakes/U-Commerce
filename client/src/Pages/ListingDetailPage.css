@@ -69,7 +69,17 @@
     background: #881c1c;
     transform: translateY(-1px);
   }
-  
+
+.detail-actions .delete-btn {
+  background-color: #8C8C8C !important;
+  color: #000000 !important;
+}
+
+.detail-actions .delete-btn:hover {
+ background-color: #737373 !important;
+}
+
+
   @media (max-width: 900px) {
     .detail-card {
       grid-template-columns: 1fr;

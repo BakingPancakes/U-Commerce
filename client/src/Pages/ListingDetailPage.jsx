@@ -6,6 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import CommentSection from "../Components/CommentSection";
 import { fetchListingById } from "../api/listingsAPI";
 import { useProfile } from "../contexts/UserHooks";
+import { deleteListing } from "../api/listingsAPI";
 
 
 const ListingDetailPage = () => {
@@ -40,6 +41,19 @@ const ListingDetailPage = () => {
 
   const isOwner = profileReady && profile && listing?.owner_id === profile.id;
 
+  const handleDelete = async () => {
+    if (!window.confirm("Are you sure you want to delete this listing?")) return;
+
+    try {
+      await deleteListing(listing.id);
+      navigate("/listings");
+    } catch (err) {
+      console.error("Failed to delete listing:", err);
+      alert("Failed to delete listing.");
+    }
+  };
+
+
   return (
     <div className="detail-page">
       <Navbar />
@@ -69,9 +83,15 @@ const ListingDetailPage = () => {
 
                 <div className="detail-actions">
                   { isOwner && (
-                    <button onClick={() => navigate(`/listings/${listing.id}/edit`)}>
-                      Edit Listing
-                    </button>
+                    <>
+                      <button onClick={() => navigate(`/listings/${listing.id}/edit`)}>
+                        Edit Listing
+                      </button>
+
+                      <button className="delete-btn" onClick={handleDelete}>
+                        Delete Listing
+                      </button>
+                    </> 
                   )}
 
                   <button onClick={() => navigate("/listings")}>
