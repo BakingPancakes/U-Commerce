@@ -78,7 +78,7 @@ function ProfilePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editingBio, setEditingBio] = useState(false);
-  const [bioDraft, setBioDraft] = useState("");
+  const [bioDraft, setBioDraft] = useState(profile?.bio || "");
 
    useEffect(() => {
     const fetchData = async () => {
@@ -115,12 +115,6 @@ function ProfilePage() {
     }
   }
 
-  // eslint-disable-next-line react-hooks/set-state-in-effect
-  useEffect(() => {
-    if (profileReady && profile) {
-      setBioDraft(profile.bio || "");
-    }
-  }, [profileReady, profile]);
 
   if (!profileReady) {
     return (
