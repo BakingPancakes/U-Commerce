@@ -44,7 +44,7 @@ const ListingDetailPage = () => {
 
   useEffect(() => {
     const loadFavorites = async () => {
-      if (!profile && !listing) return;
+      if (!profile || !listing) return;
       try {
         const favorites = await fetchFavoritesByUserID(profile.id);
         const favoriteData = favorites.find(obj => obj.listing_id === listing.id);
@@ -74,7 +74,6 @@ const ListingDetailPage = () => {
 
   const handleDeleteFavorite = async () => {
     try {
-      console.log(favoriteID);
       await deleteFavorite(favoriteID);
       setIsFavorite(false);
     } catch (err) {
