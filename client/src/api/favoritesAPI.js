@@ -3,7 +3,7 @@ const API_BASE_URL = 'http://localhost:3000/api';
 async function fetchFavoritesByUserID(user_id) {
     const response = await fetch(`${API_BASE_URL}/favorites/${user_id}`);
     if (!response.ok) {
-        throw new Error(`Failed to fetch listings: ${response.status}`);
+        throw new Error(`Failed to fetch favorite: ${response.status}`);
     }
     return response.json();
 }
@@ -25,8 +25,8 @@ async function createFavorite(user_id, listing_id) {
     return response.json();
 }
 
-async function deleteFavorite(id) {
-    const response = await fetch(`${API_BASE_URL}/favorites/${id}`, {
+async function deleteFavorite(favorite_id) {
+    const response = await fetch(`${API_BASE_URL}/favorites/${favorite_id}`, {
         method: "DELETE",
     });
 
