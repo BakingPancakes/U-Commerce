@@ -5,7 +5,7 @@
   }
   
   .profile-hero {
-    background: linear-gradient(135deg, #1d4ed8, #2563eb);
+    background: linear-gradient(135deg, #881c1c, #b91c1c);
     color: white;
     padding: 50px 20px;
   }
@@ -73,7 +73,7 @@
     border: none;
     border-radius: 10px;
     padding: 12px 18px;
-    background: #2563eb;
+    background: #b91c1c;
     color: white;
     font-weight: 600;
     cursor: pointer;
@@ -81,7 +81,7 @@
   }
   
   .edit-profile-btn:hover {
-    background: #1d4ed8;
+    background: #881c1c;
     transform: translateY(-1px);
   }
   
@@ -146,7 +146,7 @@
   }
   
   .profile-price {
-    color: #2563eb;
+    color: #881c1c;
     font-weight: 700;
   }
   
@@ -160,7 +160,7 @@
     border: none;
     border-radius: 10px;
     padding: 12px;
-    background: #16a34a;
+    background: #b91c1c;
     color: white;
     font-weight: 600;
     cursor: pointer;
@@ -168,7 +168,7 @@
   }
   
   .profile-action-btn:hover {
-    background: #15803d;
+    background: #881c1c;
   }
   
   .profile-empty-state {
@@ -197,3 +197,34 @@
       font-size: 2rem;
     }
   }
+
+  .bio-textarea {
+  width: 100%;
+  min-height: 80px;
+  padding: 8px;
+  margin-top: 6px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  resize: vertical;
+}
+
+.bio-buttons {
+  margin-top: 8px;
+  display: flex;
+  gap: 10px;
+}
+
+.save-btn, .cancel-btn {
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.save-btn {
+  background: #4caf50;
+  color: white;
+}
+
+.cancel-btn {
+  background: #ccc;
+}

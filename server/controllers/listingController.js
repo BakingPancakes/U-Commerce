@@ -68,6 +68,35 @@ export const getListingById = async (req, res) => {
     return res.status(200).json(data)
 }
 
+export const getListingByUserId = async (req, res) => {
+    const { user_id } = req.params
+
+    const { data, error } = await supabase
+        .from('listings')
+        .select(`
+            *,
+            users (
+                name,
+                profile_picture,
+                colleges (
+                    name
+                )
+            ),
+            categories (
+              name,
+              display_name
+            ),
+            listing_types (
+              type,
+              display_name
+            )
+        `)
+        .eq('owner_id', user_id)
+
+    if (error) return res.status(404).json({ error: 'Listings not found' })
+    return res.status(200).json(data)
+}
+
 export const createListing = async (req, res) => {
     const { owner_id, title, description, price, category_id, listing_type_id, images } = req.body
 

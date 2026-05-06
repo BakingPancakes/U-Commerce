@@ -5,6 +5,9 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import CommentSection from "../Components/CommentSection";
 import { fetchListingById } from "../api/listingsAPI";
+import { useProfile } from "../contexts/UserHooks";
+import { deleteListing } from "../api/listingsAPI";
+
 
 const ListingDetailPage = () => {
   const { id } = useParams();
@@ -13,6 +16,9 @@ const ListingDetailPage = () => {
   const [listing, setListing] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  const { profile, profileReady } = useProfile();
+
 
   useEffect(() => {
     const loadListing = async () => {
@@ -29,7 +35,24 @@ const ListingDetailPage = () => {
     };
 
     loadListing();
+    
+
   }, [id]);
+
+  const isOwner = profileReady && profile && listing?.owner_id === profile.id;
+
+  const handleDelete = async () => {
+    if (!window.confirm("Are you sure you want to delete this listing?")) return;
+
+    try {
+      await deleteListing(listing.id);
+      navigate("/listings");
+    } catch (err) {
+      console.error("Failed to delete listing:", err);
+      alert("Failed to delete listing.");
+    }
+  };
+
 
   return (
     <div className="detail-page">
@@ -59,9 +82,18 @@ const ListingDetailPage = () => {
                 <p><strong>Description:</strong> {listing.description || "No description available."}</p>
 
                 <div className="detail-actions">
-                  <button onClick={() => navigate(`/listings/${listing.id}/edit`)}>
-                    Edit Listing
-                  </button>
+                  { isOwner && (
+                    <>
+                      <button onClick={() => navigate(`/listings/${listing.id}/edit`)}>
+                        Edit Listing
+                      </button>
+
+                      <button className="delete-btn" onClick={handleDelete}>
+                        Delete Listing
+                      </button>
+                    </> 
+                  )}
+
                   <button onClick={() => navigate("/listings")}>
                     Back to Listings
                   </button>

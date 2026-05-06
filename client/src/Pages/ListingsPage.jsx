@@ -13,6 +13,8 @@ import "./ListingsPage.css";
 import { useMemo, useState, useEffect } from "react";
 import { fetchAllListings } from '../api/listingsAPI';
 import { useNavigate } from "react-router-dom";
+import { useProfile } from "../contexts/UserHooks";
+
 
 const ListingsPage = () => {
   const navigate = useNavigate();
@@ -22,6 +24,9 @@ const ListingsPage = () => {
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const { profile, profileReady } = useProfile();
+
 
   const categories = ["All", ...new Set(listings.map((item) => item.categories.display_name))];
 
@@ -60,7 +65,7 @@ const ListingsPage = () => {
     } else if (sortOption === "highToLow") {
       filtered = [...filtered].sort((a, b) => b.price - a.price);
     } else if (sortOption === "rating") {
-      filtered = [...filtered].sort((a, b) => b.rating - a.rating);
+      filtered = [...filtered].sort((a, b) => b.average_rating - a.average_rating);
     }
 
     return filtered;
@@ -109,12 +114,22 @@ const ListingsPage = () => {
             <option value="rating">Top Rated</option>
           </select>
 
-        <button
+        {profileReady && profile ? (
+          <button
             className="create-btn"
             onClick={() => navigate("/listings/new")}
           >
             Create Listing
           </button>
+        ) : (
+          <button
+            className="create-btn disabled-btn"
+            onClick={() => navigate("/login")}
+          >
+            Log in to Create Listing
+          </button>
+        )}
+
         </section>
 
         <section className="results-info">
@@ -148,7 +163,7 @@ const ListingsPage = () => {
                   <div className="meta">
                     <span>{item.condition}</span>
                     <span>Seller: {item.users.name}</span>
-                    <span>Rating: {item.rating}</span>
+                    <span>Rating: {item.average_rating}</span>
                   </div>
 
                   <button

@@ -2,6 +2,7 @@ import { Router } from 'express'
 import {
     getAllListings,
     getListingById,
+    getListingByUserId,
     createListing,
     updateListing,
     deleteListing,
@@ -23,6 +24,7 @@ router.delete('/comments/:id', deleteComment)
 
 router.get('/', getAllListings)
 router.get('/:id', getListingById)
+router.get('/user/:user_id', getListingByUserId)
 router.post('/', createListing)
 router.put('/:id', updateListing)
 router.delete('/:id', deleteListing)

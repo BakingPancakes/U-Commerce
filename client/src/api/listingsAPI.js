@@ -16,10 +16,18 @@ async function fetchAllListingCategories() {
   return response.json();
 }
 
-async function fetchListingById(id) {
-  const response = await fetch(`${API_BASE_URL}/listings/${id}`);
+async function fetchListingById(user_id) {
+  const response = await fetch(`${API_BASE_URL}/listings/${user_id}`);
   if (!response.ok) {
-    throw new Error(`Failed to fetch listing by ID: ${id}`);
+    throw new Error(`Failed to fetch listing by ID: ${user_id}`);
+  }
+  return response.json();
+}
+
+async function fetchListingByUserId(user_id) {
+  const response = await fetch(`${API_BASE_URL}/listings/user/${user_id}`);
+  if (!response.ok) {
+    throw new Error(`Failed to fetch listing by ID: ${user_id}`);
   }
   return response.json();
 }
@@ -31,7 +39,7 @@ async function createListing(data) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      owner_id: "f82c260a-3c04-43d9-995f-7670c184cd6c", // default user
+      owner_id: data.user_id, // default user
       title: data.title,
       description: data.description,
       price: data.price,
@@ -129,4 +137,4 @@ async function deleteListingComment(id) {
   return response.json();
 }
 
-export { fetchAllListings, fetchListingById, createListing, updateListing, deleteListing, fetchAllListingCategories, fetchListingCommentById, createListingComment, updateListingComment, deleteListingComment };
+export { fetchAllListings, fetchListingById, fetchListingByUserId, createListing, updateListing, deleteListing, fetchAllListingCategories, fetchListingCommentById, createListingComment, updateListingComment, deleteListingComment };

@@ -10,16 +10,28 @@ export const UserProvider = ({children}) => {
     const [profileReady, setProfileReady] = useState(false);
 
     const handleNewUser = async (token, user) => {
-        console.log("creating user with data:", getCollege(user.email));
+        //console.log("creating user with data:", getCollege(user.email));
+        const college_id = getCollege(user.email)
         const data = await createUser(
             token,
             user.sub,
             user.email,
             user.name,
-            getCollege(user.email),
+            college_id
         );
         return data;
     }
+
+    const refreshProfile = async () => {
+        try {
+            const token = await getAccessTokenSilently();
+            const updated = await fetchUserByID(token);
+            setProfile(updated);
+        } catch (err) {
+            console.error("Failed to refresh profile:", err);
+        }
+    };
+
 
     useEffect(() => {
         if (isLoading || !isAuthenticated) return;
@@ -48,10 +60,10 @@ export const UserProvider = ({children}) => {
             }
         }
         fetchProfile();
-    }, [isAuthenticated, isLoading]);
+    }, [isAuthenticated, isLoading, getAccessTokenSilently, logout, user]);
 
     return (
-        <UserContext.Provider value={{profile, profileReady}}>
+        <UserContext.Provider value={{profile, profileReady, refreshProfile}}>
             {children}
         </UserContext.Provider>
     );
