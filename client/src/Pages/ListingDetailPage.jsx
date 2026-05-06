@@ -44,13 +44,16 @@ const ListingDetailPage = () => {
 
   useEffect(() => {
     const loadFavorites = async () => {
-      if (profile && listing) {
+      if (!profile && !listing) return;
+      try {
         const favorites = await fetchFavoritesByUserID(profile.id);
         const favoriteData = favorites.find(obj => obj.listing_id === listing.id);
         if (favoriteData) {
-          setIsFavorite(true)
-          setFavoriteID(favoriteData.id)
+          setIsFavorite(true);
+          setFavoriteID(favoriteData.id);
         }
+      } catch (err) {
+        console.log("Failed to retrieve user favorites:", err);
       }
     }
 
@@ -71,12 +74,12 @@ const ListingDetailPage = () => {
 
   const handleDeleteFavorite = async () => {
     try {
-      console.log(favoriteID)
+      console.log(favoriteID);
       await deleteFavorite(favoriteID);
       setIsFavorite(false);
     } catch (err) {
       console.log("Failed to delete listing from favorites:", err);
-      alert("Sorry, we couldn't delete this listing from your favorites list.")
+      alert("Sorry, we couldn't delete this listing from your favorites list.");
     }
   }
 

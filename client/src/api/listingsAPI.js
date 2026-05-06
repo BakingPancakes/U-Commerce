@@ -16,10 +16,10 @@ async function fetchAllListingCategories() {
   return response.json();
 }
 
-async function fetchListingById(user_id) {
-  const response = await fetch(`${API_BASE_URL}/listings/${user_id}`);
+async function fetchListingById(listing_id) {
+  const response = await fetch(`${API_BASE_URL}/listings/${listing_id}`);
   if (!response.ok) {
-    throw new Error(`Failed to fetch listing by ID: ${user_id}`);
+    throw new Error(`Failed to fetch listing by ID: ${listing_id}`);
   }
   return response.json();
 }
