@@ -1,4 +1,5 @@
 import supabase from '../config/supabaseClient.js'
+import { notifyFavoritors } from './notificationController.js'
 
 export const getAllListings = async (req, res) => {
   const { category, listing_type, min_price, max_price } = req.query
@@ -146,17 +147,37 @@ export const updateListing = async (req, res) => {
         `)
         .single()
 
+    try {
+      await notifyFavoritors(id, data.owner_id, 'LISTING_MODIFIED');
+    } catch (err) {
+      console.log(`Error sending notifications for modifying listing ${id}: ${err}`);
+    }
+
     if (error) return res.status(500).json({ error: error.message })
     return res.status(200).json(data)
 }
 
 export const deleteListing = async (req, res) => {
     const { id } = req.params
+    
+    try { // notify users before listing is deleted
+      const { data: listing } = await supabase
+        .from('listings')
+        .select(`
+          owner_id
+          `)
+        .eq('id', id)
+        .single()
+      await notifyFavoritors(id, listing.owner_id, 'LISTING_DELETED');
+    } catch (err) {
+      console.log(`Error sending notifications for deleting listing ${id}: ${err}`);
+    }
 
     const { error } = await supabase
         .from('listings')
         .delete()
         .eq('id', id)
+
 
     if (error) return res.status(500).json({ error: error.message })
     return res.status(200).json({ message: 'Listing deleted' })
@@ -205,6 +226,12 @@ export const createComment = async (req, res) => {
       created_at,
       users:commenter_id ( name )
     `);
+
+    try {
+      await notifyFavoritors(listing_id, commenter_id, 'COMMENT_ADDED');
+    } catch (err) {
+      console.log(`Error notifying favoritors for listing ${listing_id}: ${JSON.stringify(err)}`)
+    }
 
   if (error) return res.status(500).json({ error: error.message });
   return res.status(201).json(data[0]);

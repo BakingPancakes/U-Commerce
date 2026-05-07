@@ -1,32 +1,13 @@
 import "./ProfilePage.css";
 import Navbar from "../Components/Navbar";
-import { fetchListingByUserId } from "../api/listingsAPI";
+import { fetchListingById, fetchListingByUserId } from "../api/listingsAPI";
 import { useState, useEffect } from "react";
 import { useProfile } from "../contexts/UserHooks";
 import { getCollegeName } from "../utils";
 import { updateUser } from "../api/userAPI";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useNavigate } from "react-router-dom";
-
-
-const likedListings = [
-  {
-    id: 3,
-    title: "Twin XL Bed Frame",
-    price: 90,
-    condition: "Used - Fair",
-    image:
-      "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    id: 4,
-    title: "Calculus Textbook",
-    price: 25,
-    condition: "Used - Fair",
-    image:
-      "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=800&q=80",
-  },
-];
+import { fetchFavoritesByUserID } from "../api/favoritesAPI";
 
 function formatJoinDate(dateString) {
   const date = new Date(dateString);
@@ -75,19 +56,20 @@ function ProfilePage() {
   const { profile, profileReady, refreshProfile } = useProfile();
   const { getAccessTokenSilently } = useAuth0();
   const [listings, setListings] = useState([]);
+  const [favoritedListings, setFavoritedListings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editingBio, setEditingBio] = useState(false);
   const [bioDraft, setBioDraft] = useState(profile?.bio || "");
 
    useEffect(() => {
-    const fetchData = async () => {
+    const fetchUserListings = async () => {
       if (!profileReady || !profile?.id) return;
 
       try {
         setLoading(true);
-        const data = await fetchListingByUserId(profile.id);//hardcoded user for now
-        setListings(data);
+        const listingsData = await fetchListingByUserId(profile.id);
+        setListings(listingsData);
         setError(null);
       } catch (err) {
         setError(err.message);
@@ -97,7 +79,24 @@ function ProfilePage() {
       }
     };
 
-    fetchData();
+    const fetchFavoritedListings = async () => {
+      if (!profileReady || !profile?.id) return;
+
+      try {
+        const favorites = await fetchFavoritesByUserID(profile.id);
+        const listings = [];
+        for (const fav of favorites) {
+          const listing = await fetchListingById(fav.listing_id);
+          listings.push(listing)
+        }
+        setFavoritedListings(listings)
+      } catch (err) {
+        console.error("Error fetching favorited listings:", err)
+      }
+    }
+
+    fetchFavoritedListings();
+    fetchUserListings();
   }, [profileReady, profile]);
 
   const handleSaveBio = async () => {
@@ -205,12 +204,12 @@ function ProfilePage() {
         <section className="profile-section">
           <div className="profile-section-header">
             <h2>Liked Listings</h2>
-            <span>{likedListings.length} item(s)</span>
+            <span>{favoritedListings.length} item(s)</span>
           </div>
 
           <div className="profile-listings-grid">
-            {likedListings.length > 0 ? (
-              likedListings.map((item) => <ListingCard key={item.id} item={item} />)
+            {favoritedListings.length > 0 ? (
+              favoritedListings.map((item) => <ListingCard key={item.id} item={item} />)
             ) : (
               <div className="profile-empty-state">
                 <p>You have not liked any listings yet.</p>

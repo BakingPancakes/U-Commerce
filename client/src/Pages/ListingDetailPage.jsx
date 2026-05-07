@@ -7,6 +7,7 @@ import CommentSection from "../Components/CommentSection";
 import { fetchListingById } from "../api/listingsAPI";
 import { useProfile } from "../contexts/UserHooks";
 import { deleteListing } from "../api/listingsAPI";
+import { createFavorite, deleteFavorite, fetchFavoritesByUserID } from "../api/favoritesAPI";
 
 
 const ListingDetailPage = () => {
@@ -19,6 +20,8 @@ const ListingDetailPage = () => {
 
   const { profile, profileReady } = useProfile();
 
+  const [ favoriteID, setFavoriteID ] = useState(null);
+  const [ isFavorite, setIsFavorite ] = useState(false);
 
   useEffect(() => {
     const loadListing = async () => {
@@ -39,9 +42,47 @@ const ListingDetailPage = () => {
 
   }, [id]);
 
+  useEffect(() => {
+    const loadFavorites = async () => {
+      if (!profile || !listing) return;
+      try {
+        const favorites = await fetchFavoritesByUserID(profile.id);
+        const favoriteData = favorites.find(obj => obj.listing_id === listing.id);
+        if (favoriteData) {
+          setIsFavorite(true);
+          setFavoriteID(favoriteData.id);
+        }
+      } catch (err) {
+        console.log("Failed to retrieve user favorites:", err);
+      }
+    }
+
+    loadFavorites();
+  }, [profile, listing, isFavorite]);
+
   const isOwner = profileReady && profile && listing?.owner_id === profile.id;
 
-  const handleDelete = async () => {
+  const handleAddFavorite = async () => {
+    try {
+      await createFavorite(profile.id, listing.id);
+      setIsFavorite(true);
+    } catch (err) {
+      console.log("Failed to add listing to favorites:", err);
+      alert("Sorry, we couldn't add listing to your favorites list.");
+    }
+  }
+
+  const handleDeleteFavorite = async () => {
+    try {
+      await deleteFavorite(favoriteID);
+      setIsFavorite(false);
+    } catch (err) {
+      console.log("Failed to delete listing from favorites:", err);
+      alert("Sorry, we couldn't delete this listing from your favorites list.");
+    }
+  }
+
+  const handleDeleteListing = async () => {
     if (!window.confirm("Are you sure you want to delete this listing?")) return;
 
     try {
@@ -88,7 +129,7 @@ const ListingDetailPage = () => {
                         Edit Listing
                       </button>
 
-                      <button className="delete-btn" onClick={handleDelete}>
+                      <button className="delete-btn" onClick={handleDeleteListing}>
                         Delete Listing
                       </button>
                     </> 
@@ -97,6 +138,19 @@ const ListingDetailPage = () => {
                   <button onClick={() => navigate("/listings")}>
                     Back to Listings
                   </button>
+
+                  { profile && (
+                    isFavorite ? (
+                      <button onClick={handleDeleteFavorite}>
+                        Remove from Favorites ⭐
+                      </button>
+                    )
+                    : (
+                      <button onClick={handleAddFavorite}>
+                        Add to Favorites ⭐
+                      </button>
+                    )
+                  )}
                 </div>
               </div>
             </div>

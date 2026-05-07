@@ -10,7 +10,6 @@ export const UserProvider = ({children}) => {
     const [profileReady, setProfileReady] = useState(false);
 
     const handleNewUser = async (token, user) => {
-        //console.log("creating user with data:", getCollege(user.email));
         const college_id = getCollege(user.email)
         const data = await createUser(
             token,
@@ -43,11 +42,9 @@ export const UserProvider = ({children}) => {
                 const token = await getAccessTokenSilently();
                 if (!token) return;
                 const storedUser = await fetchUserByID(token);
-                console.log(storedUser)
                 const data = storedUser === null
                     ? await handleNewUser(token, user)
                     : storedUser
-                console.log("Retrieved user data:", data);
                 setProfile(data);
                 setProfileReady(true);
             } catch (err) {

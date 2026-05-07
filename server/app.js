@@ -4,6 +4,7 @@ import dotenv from 'dotenv'
 import { auth } from 'express-oauth2-jwt-bearer'
 import userRoutes from './routes/userRoutes.js'
 import listingRoutes from './routes/listingRoutes.js'
+import favoritesRoutes from "./routes/favoritesRoutes.js"
 
 dotenv.config()
 
@@ -29,6 +30,7 @@ app.get('/test', (_req, res) => {
 
 app.use('/api/users', checkJwt, userRoutes)
 app.use('/api/listings', listingRoutes)
+app.use('/api/favorites', favoritesRoutes)
 
 app.use((err, _req, res, _next) => {
     console.error(err.stack)
