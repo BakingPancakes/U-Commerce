@@ -27,7 +27,7 @@ MAILERSEND_API_KEY==your_mailersend_api_key
 
 #### 1. Clone the repository
 ```sh
-git clone <repo-url>
+git clone [<repo-url>](https://github.com/BakingPancakes/U-Commerce.git)
 cd U-Commerce
 ```
 
