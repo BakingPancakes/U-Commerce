@@ -1,16 +1,43 @@
-# React + Vite
+# U-Commerce Front End Using ReactJS
+This directory includes the client-side React component generation and asynchronous communication with the backend API.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Project structure:
+```text
+client/
+├── public/     # public assets (ex. favicon)
+└── src/        # source files for dist
+    ├── __tests_/       # unit tests
+    ├── api/            # backe end api calls
+    ├── assets/         # local images
+    ├── Components/     # commonly used React components + styling
+        └── __tests__ /     # component tests
+    ├── contexts/       # define React context providers
+    ├── Pages/          # React components + styling for each page
+    └── test/           # jest test setup
+```
 
-Currently, two official plugins are available:
+## Pages
+Navbar is present at the top of all pages.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+### Main: /
+Landing page with the website introduction and purpose.
 
-## React Compiler
+### Login: /login
+Default is a "login" screen for returning users, alternatively a "register" page is shown to new users. Central button redirects to the auth0 site. Site is only accessible for users who are not logged in.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Listings: /listings
+Displays all of the listings available, along with a search bar, category filters, and sorting by price/rating. Listing detail page can be viewed by clicking on "View Listing" under a listing, and listings can be created by clicking "Create Listing".
 
-## Expanding the ESLint configuration
+### Listing Detail: /listings/:id
+Show the details associated with a listing. View and create comments and ratings of a listing.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Listing Form: /listings/:id/new, /listings/:id/edit
+Create a listing or modify an existing listing
+
+## Auth0 context provider
+```useAuth()``` provides methods for authentication redirects (to auth0 site for user to enter credentials), access tokens after authentication, and a logout() which ends authenticated session.
+
+Refresh tokens are configured, allowing for login sessions to persist between browser refreshes.
+
+## User context provider
+```useProfile()``` provides states ```profile``` which gives components access to user's data after authentication, and ```profileReady``` which is set to ```true``` once a session is active and user data has been successfully retrieved from the database.
